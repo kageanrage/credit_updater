@@ -57,7 +57,7 @@ driver = webdriver.Chrome(chrome_path)  # specify webdriver (selenium)
 login(driver)
 
 excel_file = cfg.excel_file  # xlsx filename pulled from config file
-df = pd.read_excel(excel_file, sheetname=0, index_col=0)  # read excel file into pandas DataFrame
+df = pd.read_excel(excel_file, index_col=0)  # read excel file into pandas DataFrame
 
 errors_list = []  # create empty list of guids which had errors, to be populated later
 success_list = []  # create empty list of guids which reported no errors, to be populated later
