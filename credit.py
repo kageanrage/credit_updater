@@ -39,6 +39,7 @@ def enter_data(driv, guid, reas, quan):
         quan_elem.clear()  # delete any text present in that field
         quan_elem.send_keys(quan)  # enter Quantity string
         quan_elem.send_keys(Keys.ENTER)  # Press Enter key
+
     except:
         print(f"(in enter data function) - issue arose. GUID = {guid}")
 
@@ -70,7 +71,7 @@ for row in df.itertuples():  # iterate through each row in the DataFrame
     num_of_credits = row.Credits  # assign whatever is in the 'Credits' column, to the variable 'num_of_credits'
     driver.get(cfg.assign_URL)  # load desired URL
     logging.debug(f"Start of loop - guid = {guid}, reason = {reason}, credits = {num_of_credits}")  # logging
-    enter_data(driver, guid, reason, num_of_credits)
+    enter_data(driver, guid, reason, str(int(num_of_credits)))
     time.sleep(2)  # possibly not necessary, but don't want the next bit to happen if browser not ready
     check_for_error(driver, guid)
     time.sleep(2)  # possibly not necessary, but don't want to restart loop if browser not ready
