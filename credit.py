@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from config import Config   # this imports the config file where the private data sits
 import pandas as pd
+import se_general, se_admin, se_zoho
 
 logging.basicConfig(level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')  # turns on logging
 # logging.disable(logging.CRITICAL)     # switches off logging when desired
@@ -15,6 +16,7 @@ cfg = Config()  # create an instance of the Config class, essentially brings pri
 os.chdir(cfg.cwd)  # change the current working directory to the one stipulated in config file
 
 
+# outdated as of 17-12-20
 def login(driv):
     driv.get(cfg.assign_URL)  # use selenium webdriver to open web browser and desired URL from config file
     email_elem = driv.find_element_by_id('UserName')  # find the 'Username' text box on web page using its element ID
@@ -52,12 +54,12 @@ def check_for_error(driv, memberid):  # checks the screen for the word 'error' a
         success_list.append(memberid)  # if 'error' was not found on screen, add the guid from the current loop to the success list
 
 
-chrome_path = cfg.chrome_path  # location of chromedriver.exe on local drive
-driver = webdriver.Chrome(chrome_path)  # specify webdriver (selenium)
-login(driver)
+driver = se_general.init_selenium()
+driver.implicitly_wait(30)
+se_admin.login_sa_2fa(driver, cfg.assign_URL)  # now using fn from module
 
 excel_file = cfg.excel_file  # xlsx filename pulled from config file
-df = pd.read_excel(excel_file, index_col=0)  # read excel file into pandas DataFrame
+df = pd.read_excel(excel_file, index_col=0, engine="openpyxl")  # read excel file into pandas DataFrame
 
 errors_list = []  # create empty list of guids which had errors, to be populated later
 success_list = []  # create empty list of guids which reported no errors, to be populated later
