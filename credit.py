@@ -56,11 +56,12 @@ def check_for_error(driv, memberid):  # checks the screen for the word 'error' a
 
 
 driver = se_general.init_selenium()
-driver.implicitly_wait(30)
+driver.implicitly_wait(1)  # 30-10-21 trying this with minimal wait time to speed things up
 se_admin.login_sa_2fa(driver, cfg.assign_URL)  # now using fn from module
 
 excel_file = cfg.excel_file  # xlsx filename pulled from config file
 df = pd.read_excel(excel_file, index_col=0, engine="openpyxl")  # read excel file into pandas DataFrame
+df.dropna(inplace=True)  # added 30-10-21 as the df now seems to have a whole lot of empty rows in it
 
 errors_list = []  # create empty list of guids which had errors, to be populated later
 success_list = []  # create empty list of guids which reported no errors, to be populated later
